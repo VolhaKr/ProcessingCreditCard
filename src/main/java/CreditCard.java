@@ -20,7 +20,7 @@ public class CreditCard {
 
     private CardType validateNumberForPayingSystem(String number) {
         for ( CardType cardType : CardType.values() ) {
-            for ( String numberPrefix : cardType.numberPrefixes ) {
+            for ( String numberPrefix : cardType.getNumberPrefixes()) {
                 if (number.startsWith(numberPrefix)) {
                     return cardType;
                 }
