@@ -1,9 +1,9 @@
 package andrylat.dev.volha;
 
-public class NoPayingSystemException extends Throwable {
-    String message;
+public class PaymentSystemException extends Throwable {
+    private String message;
 
-    public NoPayingSystemException(String message) {
+    public PaymentSystemException(String message) {
         this.message = message;
     }
 

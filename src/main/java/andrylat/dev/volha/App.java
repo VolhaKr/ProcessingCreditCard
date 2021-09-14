@@ -9,15 +9,15 @@ public class App {
 
         String input = in.nextLine();
         //doesn't work -  String input = System.console().readLine();
-        InputForCardNumberValidator inputForCardNumberValidator = new InputForCardNumberValidator(input);
+        CardNumberValidator cardNumberValidator = new CardNumberValidator(input);
 
         try {
-            inputForCardNumberValidator.validateInputForCardNumber();
-            PayingSystemForNumberResolver payingSystemForNumberResolver = new PayingSystemForNumberResolver();
-            System.out.println(payingSystemForNumberResolver.resolve(input));
+            cardNumberValidator.validate();
+            PaymentSystemResolver paymentSystemResolver = new PaymentSystemResolver();
+            System.out.println("Card payment system is "+ paymentSystemResolver.resolve(input));
         } catch (CardNumberException e) {
             System.out.println("Error: " + e.getMessage());
-        } catch (NoPayingSystemException e) {
+        } catch (PaymentSystemException e) {
             System.out.println("Error: " + e.getMessage());
         }
     }

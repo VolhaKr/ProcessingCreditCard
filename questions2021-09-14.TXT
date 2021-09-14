@@ -1,0 +1,24 @@
+    1. “class InputForCardNumberValidatorTest {
+
+ private static final int CARD_NUMBER_LENGTH = 16;»
+
+ how to use the variable from andrylat.dev.volha.CardNumberValidator.*?
+
+
+    2. «class InputForCardNumberValidatorTest 
+assertThrows(CardNumberException.class, () -> cardNumberValidator.validateInputForCardNumber(),
+ "Your input is wrong. Card number is not specified.");
+
+how to check messages for exceptions and why aren’t they checked.
+
+    3. «class InputForCardNumberValidatorTest 
+public void validateInputForCardNumberShouldThrowExceptionWhenRightCheckNumberWithRoots() {...
+
+is there another way to check that an exception is not thrown?
+
+    4. class App
+Wanted to try to use System.console().readLine(), but it didn’t work.
+
+    5. I know that names are too long, but let’s change them together :)
+       
+    6. When test resolver checks paying system, the number check doesn’t work – test passes if prefix is right, but last check number is wrong

@@ -1,6 +1,6 @@
 package andrylat.dev.volha;
 
-public enum PayingSystem {
+public enum PaymentSystem {
     VISA("4"),
     MASTERCARD("51", "52", "53", "54", "55"),
     DINERS_CLUB("36", "38"),
@@ -10,7 +10,7 @@ public enum PayingSystem {
 
     private String[] numberPrefixes;
 
-    PayingSystem(String... numberPrefixes) {
+    PaymentSystem(String... numberPrefixes) {
         this.numberPrefixes = numberPrefixes;
     }
 
