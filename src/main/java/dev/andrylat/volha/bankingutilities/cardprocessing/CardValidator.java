@@ -1,23 +1,19 @@
-package andrylat.dev.volha;
+package dev.andrylat.volha.bankingutilities.cardprocessing;
+
+import dev.andrylat.volha.bankingutilities.cardprocessing.exceptions.CardNumberException;
 
 import java.util.stream.Stream;
 
-public class CardNumberValidator {
+public class CardValidator {
     public static final int CARD_NUMBER_LENGTH = 16;
 
-    private String input;
-
-    public CardNumberValidator(String input) {
-        this.input = input;
+    public void validate(String number) throws CardNumberException {
+        validateNumberForNumber(number);
+        validateNumberForCheckDigit(number);
     }
 
-    public void validate() throws CardNumberException {
-        validateNumberForNumber();
-        validateNumberForCheckDigit();
-    }
-
-    private void validateNumberForNumber() throws CardNumberException {
-final String ONLY_DIGITS = "[0-9]+";
+    private void validateNumberForNumber(String input) throws CardNumberException {
+        final String ONLY_DIGITS = "[0-9]+";
         if (input == null || input.isEmpty()) {
             throw new CardNumberException("Your input is wrong. Card number is not specified.");
         } else {
@@ -32,7 +28,7 @@ final String ONLY_DIGITS = "[0-9]+";
         }
     }
 
-    private void validateNumberForCheckDigit() throws CardNumberException {
+    private void validateNumberForCheckDigit(String input) throws CardNumberException {
         int checkSum = 0;
 
         int[] digits = Stream.of(input.split("")).

@@ -1,4 +1,4 @@
-package andrylat.dev.volha;
+package dev.andrylat.volha.bankingutilities.cardprocessing.paymentsystem;
 
 public enum PaymentSystem {
     VISA("4"),

@@ -1,5 +1,6 @@
-package andrylat.dev.volha;
+package dev.andrylat.volha.bankingutilities.cardprocessing.paymentsystem;
 
+import dev.andrylat.volha.bankingutilities.cardprocessing.exceptions.PaymentSystemException;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -9,7 +10,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 //I think I used BeforeALl without this annotation earlier
 
-class PayingSystemResolverTest {
+class PaymentSystemResolverTest {
     private PaymentSystemResolver paymentSystemResolver;
 
     @BeforeAll

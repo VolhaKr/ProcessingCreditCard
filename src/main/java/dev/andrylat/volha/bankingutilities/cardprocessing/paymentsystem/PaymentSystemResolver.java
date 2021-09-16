@@ -1,4 +1,6 @@
-package andrylat.dev.volha;
+package dev.andrylat.volha.bankingutilities.cardprocessing.paymentsystem;
+
+import dev.andrylat.volha.bankingutilities.cardprocessing.exceptions.PaymentSystemException;
 
 public class PaymentSystemResolver {
 

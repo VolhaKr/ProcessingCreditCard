@@ -1,4 +1,4 @@
-package andrylat.dev.volha;
+package dev.andrylat.volha.bankingutilities.cardprocessing.exceptions;
 
 public class PaymentSystemException extends Throwable {
     private String message;
