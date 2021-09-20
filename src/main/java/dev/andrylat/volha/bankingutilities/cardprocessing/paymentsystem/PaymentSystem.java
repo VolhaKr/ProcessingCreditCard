@@ -8,15 +8,16 @@ public enum PaymentSystem {
     JCB("35"),
     AMERICAN_EXPRESS("34", "37");
 
-    private String[] numberPrefixes;
+    private String[] prefixes;
 
     PaymentSystem(String... numberPrefixes) {
-        this.numberPrefixes = numberPrefixes;
+        this.prefixes = numberPrefixes;
     }
 
     String[] getNumberPrefixes() {
-        return numberPrefixes;
-    }
 
+        return prefixes;
+    }
 }
+
 

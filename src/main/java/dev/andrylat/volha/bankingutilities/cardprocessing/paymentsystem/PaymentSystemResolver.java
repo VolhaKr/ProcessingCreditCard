@@ -12,7 +12,7 @@ public class PaymentSystemResolver {
                 }
             }
         }
-        throw new PaymentSystemException("Please, check your input. There is no such payment system");
+        throw new PaymentSystemException("There is no such payment system");
     }
 }
 

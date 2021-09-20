@@ -6,40 +6,45 @@ import java.util.stream.Stream;
 
 public class CardValidator {
     public static final int CARD_NUMBER_LENGTH = 16;
+    CardNumberException exceptionToThrow = new CardNumberException();
 
     public void validate(String number) throws CardNumberException {
-        validateNumberForNumber(number);
-        validateNumberForCheckDigit(number);
-    }
 
-    private void validateNumberForNumber(String input) throws CardNumberException {
-        final String ONLY_DIGITS = "[0-9]+";
-        if (input == null || input.isEmpty()) {
-            throw new CardNumberException("Your input is wrong. Card number is not specified.");
+        final String SPACE_REGEX = "\\s";
+        if (number == null || number.isEmpty()) {
+            exceptionToThrow.addMessage("Number cannot be undefined");
         } else {
-            input = input.replaceAll("\\s", "");
-            if (input.length() != CARD_NUMBER_LENGTH) {
-                throw new CardNumberException("Your input is wrong. Card number must contain " + CARD_NUMBER_LENGTH + " digits.");
-            } else {
-                if (!input.matches(ONLY_DIGITS)) {
-                    throw new CardNumberException("Your input is wrong. Card number must contain only numbers from 0 to 9.");
-                }
-            }
+            number = number.replaceAll(SPACE_REGEX, "");
+            validateNumberForNumber(number);
+            validateForCheckDigit(number);
         }
     }
 
-    private void validateNumberForCheckDigit(String input) throws CardNumberException {
-        int checkSum = 0;
+    private void validateNumberForNumber(String input) throws CardNumberException {
+        final String ONLY_DIGITS_REGEX = "[0-9]+";
 
+        if (input.length() != CARD_NUMBER_LENGTH) {
+            exceptionToThrow.addMessage("Card number must be " + CARD_NUMBER_LENGTH + " digits");
+        }
+        if (!input.matches(ONLY_DIGITS_REGEX)) {
+            exceptionToThrow.addMessage("Card number must contain only numbers from 0 to 9.");
+        }
+
+        if (!exceptionToThrow.getMessages().isEmpty()) {
+            throw exceptionToThrow;
+        }
+    }
+
+    private void validateForCheckDigit(String input) throws CardNumberException {
+        int checkSum = 0;
         int[] digits = Stream.of(input.split("")).
                 mapToInt(Integer::parseInt).
                 toArray();
 
-        final int LENGTH_OF_DIGITS = digits.length;
-        final int CHECK_DIGIT = digits[LENGTH_OF_DIGITS - 1];
+        final int CHECK_DIGIT = digits[digits.length - 1];
         boolean evenPosition = true;
 
-        for ( int i = LENGTH_OF_DIGITS - 2; i >= 0; i-- ) {
+        for ( int i = digits.length - 2; i >= 0; i-- ) {
             if (evenPosition) {
                 checkSum = checkSum + processEven(digits[i]);
             } else {
@@ -51,9 +56,10 @@ public class CardValidator {
         if ((checkSum + CHECK_DIGIT) % 10 == 0) {
             return;
         } else {
-            throw new CardNumberException("Your input is wrong - check number is not valid");
+            exceptionToThrow.addMessage("Сheck number is not valid");
         }
     }
+
 
     private int processEven(int digit) {
         if (digit * 2 < 10) {

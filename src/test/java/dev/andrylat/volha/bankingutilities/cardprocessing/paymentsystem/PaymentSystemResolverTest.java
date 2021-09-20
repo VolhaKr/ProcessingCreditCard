@@ -6,17 +6,19 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 
 import static org.junit.jupiter.api.Assertions.*;
+//import dev.andrylat.volha.bankingutilities.cardprocessing.paymentsystem.PaymentSystemResolver;
 
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
+//@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 //I think I used BeforeALl without this annotation earlier
 
 class PaymentSystemResolverTest {
-    private PaymentSystemResolver paymentSystemResolver;
+    //  private PaymentSystemResolver paymentSystemResolver;
 
-    @BeforeAll
-    public void init() {
-        paymentSystemResolver = new PaymentSystemResolver();
-    }
+//    @BeforeAll
+//    public void init() {
+
+    PaymentSystemResolver paymentSystemResolver = new PaymentSystemResolver();
+    //  }
 
     @Test
     public void validateResolveShouldThrowExceptionWhenWrongPrefix() {

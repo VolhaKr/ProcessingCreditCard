@@ -1,14 +1,17 @@
 package dev.andrylat.volha.bankingutilities.cardprocessing.exceptions;
 
-public class CardNumberException extends Exception {
-    private String message;
+import java.util.ArrayList;
+import java.util.List;
 
-    public CardNumberException(String message) {
-        this.message = message;
+public class CardNumberException extends Exception {
+    private List<String> messages = new ArrayList<String>();
+
+    public void addMessage(String message) {
+        messages.add(message);
     }
 
-    @Override
-    public String getMessage() {
-        return message;
+    public List<String> getMessages() {
+        return messages;
     }
 }
+
