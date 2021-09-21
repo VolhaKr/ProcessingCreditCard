@@ -15,12 +15,12 @@ public class CardValidator {
             exceptionToThrow.addMessage("Number cannot be undefined");
         } else {
             number = number.replaceAll(SPACE_REGEX, "");
-            validateNumberForNumber(number);
+            validateIfNumber(number);
             validateForCheckDigit(number);
         }
     }
 
-    private void validateNumberForNumber(String input) throws CardNumberException {
+    private void validateIfNumber(String input) throws CardNumberException {
         final String ONLY_DIGITS_REGEX = "[0-9]+";
 
         if (input.length() != CARD_NUMBER_LENGTH) {
@@ -36,6 +36,10 @@ public class CardValidator {
     }
 
     private void validateForCheckDigit(String input) throws CardNumberException {
+        /**
+         * The last digit of a card number is calculated by Luhn algorythm
+         * https://datagenetics.com/blog/july42013/index.html
+         */
         int checkSum = 0;
         int[] digits = Stream.of(input.split("")).
                 mapToInt(Integer::parseInt).
@@ -59,7 +63,6 @@ public class CardValidator {
             exceptionToThrow.addMessage("Сheck number is not valid");
         }
     }
-
 
     private int processEven(int digit) {
         if (digit * 2 < 10) {

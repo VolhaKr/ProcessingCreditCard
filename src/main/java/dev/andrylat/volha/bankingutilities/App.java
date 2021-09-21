@@ -7,28 +7,29 @@ import dev.andrylat.volha.bankingutilities.cardprocessing.exceptions.CardNumberE
 import dev.andrylat.volha.bankingutilities.cardprocessing.exceptions.PaymentSystemException;
 import dev.andrylat.volha.bankingutilities.mortagecalculator.MortageCalculator;
 
-import java.io.IOException;
 import java.util.Scanner;
 
 public class App {
     private static String input = "";
 
     public static void main(String[] args) {
+
         System.out.println("Enter C to validate your card number and get it's payment system");
         System.out.println("Enter M to calculate your monthly payment to fixed-rate mortage");
-        chooseOperation();
+        try (Scanner inScanner = new Scanner(System.in)) {
+            chooseOperation(inScanner);
+        }
     }
 
-    private static void chooseOperation() {
-        Scanner inScanner = new Scanner(System.in);
+    private static void chooseOperation(Scanner inScanner) {
         input = inScanner.nextLine();
         switch (input) {
             case "C": {
-                callCardProcessing();
+                callCardProcessing(inScanner);
                 break;
             }
             case "M": {
-                callMortageCalculation();
+                callMortageCalculation(inScanner);
                 break;
             }
             default:
@@ -37,11 +38,10 @@ public class App {
         }
     }
 
-    private static void callCardProcessing() {
+    private static void callCardProcessing(Scanner inScanner) {
         System.out.println("Enter your card number: ");
         boolean errorsAdded = false;
-        Scanner in = new Scanner(System.in);
-        String inputNumber = in.nextLine();
+        String inputNumber = inScanner.nextLine();
         PaymentSystem paymentSystem = null;
         CardValidator cardValidator = new CardValidator();
         StringBuilder outputString = new StringBuilder();
@@ -65,8 +65,6 @@ public class App {
             }
 
             outputString.append(">     " + e.getMessage() + System.lineSeparator());
-
-
         }
         if (outputString.length() > 0) {
             System.out.println(outputString);
@@ -75,40 +73,45 @@ public class App {
         }
     }
 
-    private static void callMortageCalculation() {
+    private static void callMortageCalculation(Scanner inScanner) {
         final int inputPaymentsPerYear = 12;
         double inputLoan = 0;
         int inputNumberOfYears = 0;
         double inputRate = 0;
         while (!(inputLoan > 0)) {
-            try (Scanner in = new Scanner(System.in)) {
+            try {
                 System.out.println("Please, enter your loan: ");
-                inputLoan = Double.parseDouble(in.nextLine());
+                inputLoan = Double.parseDouble(inScanner.nextLine());
             } catch (NumberFormatException e) {
                 System.out.println("Wrong input");
                 inputLoan = -1;
             }
         }
 
-        System.out.println("Please, enter number of years: ");
-        Scanner inS = new Scanner(System.in);
-        inputNumberOfYears = Integer.parseInt(inS.nextLine());
         while (!(inputNumberOfYears > 0)) {
-            System.out.println("Wrong number. Number of years must be >=0. ");
-            inputNumberOfYears = Integer.parseInt(inS.nextLine());
-        }
-        System.out.println("Please, enter rate: ");
-        inputRate = Double.parseDouble(inS.nextLine());
-        while (!(inputRate > 0)) {
-            System.out.println("Wrong rate. Rate must be >=0. ");
-            inputRate = Double.parseDouble(inS.nextLine());
+            try {
+                System.out.println("Please, enter number of years: ");
+                inputNumberOfYears = Integer.parseInt(inScanner.nextLine());
+            } catch (NumberFormatException e) {
+                System.out.println("Wrong input");
+                inputNumberOfYears = -1;
+            }
         }
 
+        while (!(inputRate > 0)) {
+            try {
+                System.out.println("Please, enter rate: ");
+                inputRate = Double.parseDouble(inScanner.nextLine());
+            } catch (NumberFormatException e) {
+                System.out.println("Wrong input");
+                inputRate = -1;
+            }
+        }
 
         MortageCalculator mortageCalculator = new MortageCalculator();
-
         System.out.println("Your monthly paymet is ");
         System.out.println(mortageCalculator.calculateMonthlyPaymentFixedRateMortage(inputLoan, inputNumberOfYears, inputRate, inputPaymentsPerYear));
     }
+
 }
 
