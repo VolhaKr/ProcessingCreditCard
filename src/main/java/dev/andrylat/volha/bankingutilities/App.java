@@ -5,7 +5,7 @@ import dev.andrylat.volha.bankingutilities.cardprocessing.paymentsystem.PaymentS
 import dev.andrylat.volha.bankingutilities.cardprocessing.paymentsystem.PaymentSystemResolver;
 import dev.andrylat.volha.bankingutilities.cardprocessing.exceptions.CardNumberException;
 import dev.andrylat.volha.bankingutilities.cardprocessing.exceptions.PaymentSystemException;
-import dev.andrylat.volha.bankingutilities.mortagecalculator.MortageCalculator;
+import dev.andrylat.volha.bankingutilities.mortgagecalculator.MortgageCalculator;
 
 import java.util.Scanner;
 
@@ -44,16 +44,16 @@ public class App {
         String inputNumber = inScanner.nextLine();
         PaymentSystem paymentSystem = null;
         CardValidator cardValidator = new CardValidator();
-        StringBuilder outputString = new StringBuilder();
+        StringBuilder output = new StringBuilder();
         try {
             cardValidator.validate(inputNumber);
             // } catch (CardNumberException | PaymentSystemException e) {
             //but then you cannot process this exceptions separately???
         } catch (CardNumberException e) {
-            outputString.append("> Errors: " + System.lineSeparator());
+            output.append("> Errors: " + System.lineSeparator());
             errorsAdded = true;
             for ( String message : e.getMessages() ) {
-                outputString.append(">     " + message + System.lineSeparator());
+                output.append(">     " + message + System.lineSeparator());
             }
         }
         try {
@@ -61,13 +61,13 @@ public class App {
             paymentSystem = paymentSystemResolver.resolve(inputNumber);
         } catch (PaymentSystemException e) {
             if (!errorsAdded) {
-                outputString.append("> Errors: " + System.lineSeparator());
+                output.append("> Errors: " + System.lineSeparator());
             }
 
-            outputString.append(">     " + e.getMessage() + System.lineSeparator());
+            output.append(">     " + e.getMessage() + System.lineSeparator());
         }
-        if (outputString.length() > 0) {
-            System.out.println(outputString);
+        if (output.length() > 0) {
+            System.out.println(output);
         } else {
             System.out.println("> Card is valid. Payment system is " + paymentSystem);
         }
@@ -78,15 +78,9 @@ public class App {
         double inputLoan = 0;
         int inputNumberOfYears = 0;
         double inputRate = 0;
-        while (!(inputLoan > 0)) {
-            try {
-                System.out.println("Please, enter your loan: ");
-                inputLoan = Double.parseDouble(inScanner.nextLine());
-            } catch (NumberFormatException e) {
-                System.out.println("Wrong input");
-                inputLoan = -1;
-            }
-        }
+
+        inputLoan = readData("Please, enter your loan", inputLoan, inScanner);
+
 
         while (!(inputNumberOfYears > 0)) {
             try {
@@ -98,20 +92,25 @@ public class App {
             }
         }
 
-        while (!(inputRate > 0)) {
-            try {
-                System.out.println("Please, enter rate: ");
-                inputRate = Double.parseDouble(inScanner.nextLine());
-            } catch (NumberFormatException e) {
-                System.out.println("Wrong input");
-                inputRate = -1;
-            }
-        }
+        inputRate = readData("Please, enter your rate", inputRate, inScanner);
 
-        MortageCalculator mortageCalculator = new MortageCalculator();
+        MortgageCalculator mortgageCalculator = new MortgageCalculator();
+
         System.out.println("Your monthly paymet is ");
-        System.out.println(mortageCalculator.calculateMonthlyPaymentFixedRateMortage(inputLoan, inputNumberOfYears, inputRate, inputPaymentsPerYear));
+        System.out.println(mortgageCalculator.calculateMonthlyPaymentFixedRateMortgage(inputLoan, inputNumberOfYears, inputRate, inputPaymentsPerYear));
     }
 
+    private static double readData(String message, double readData, Scanner inScanner) {
+        while (!(readData > 0)) {
+            try {
+                System.out.println(message);
+                readData = Double.parseDouble(inScanner.nextLine());
+            } catch (NumberFormatException e) {
+                System.out.println("Wrong input");
+                readData = -1;
+            }
+        }
+        return readData;
+    }
 }
 

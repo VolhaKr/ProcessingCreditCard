@@ -6,8 +6,8 @@ import java.util.List;
 public class CardNumberException extends Exception {
     private List<String> messages = new ArrayList<String>();
 
-    public void addMessage(String message) {
-        messages.add(message);
+    public CardNumberException(List<String> errors) {
+        this.messages = errors;
     }
 
     public List<String> getMessages() {

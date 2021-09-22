@@ -2,21 +2,24 @@ package dev.andrylat.volha.bankingutilities.cardprocessing;
 
 import dev.andrylat.volha.bankingutilities.cardprocessing.exceptions.CardNumberException;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.stream.Stream;
 
 public class CardValidator {
-    public static final int CARD_NUMBER_LENGTH = 16;
-    CardNumberException exceptionToThrow = new CardNumberException();
+    private static final int CARD_NUMBER_LENGTH = 16;
+    private List <String> errors = new ArrayList<>();
+    //CardNumberException exceptionToThrow = new CardNumberException();
 
     public void validate(String number) throws CardNumberException {
 
         final String SPACE_REGEX = "\\s";
         if (number == null || number.isEmpty()) {
-            exceptionToThrow.addMessage("Number cannot be undefined");
+           errors.add("Number cannot be undefined");
         } else {
             number = number.replaceAll(SPACE_REGEX, "");
             validateIfNumber(number);
-            validateForCheckDigit(number);
+            validateCheckDigit(number);
         }
     }
 
@@ -24,22 +27,22 @@ public class CardValidator {
         final String ONLY_DIGITS_REGEX = "[0-9]+";
 
         if (input.length() != CARD_NUMBER_LENGTH) {
-            exceptionToThrow.addMessage("Card number must be " + CARD_NUMBER_LENGTH + " digits");
+            errors.add("Card number must be " + CARD_NUMBER_LENGTH + " digits");
         }
         if (!input.matches(ONLY_DIGITS_REGEX)) {
-            exceptionToThrow.addMessage("Card number must contain only numbers from 0 to 9.");
+            errors.add("Card number must contain only numbers from 0 to 9.");
         }
 
-        if (!exceptionToThrow.getMessages().isEmpty()) {
-            throw exceptionToThrow;
+        if (!errors.isEmpty()) {
+            throw new CardNumberException(errors);
         }
     }
 
-    private void validateForCheckDigit(String input) throws CardNumberException {
-        /**
-         * The last digit of a card number is calculated by Luhn algorythm
-         * https://datagenetics.com/blog/july42013/index.html
-         */
+    /**
+     * The last digit of a card number is calculated by Luhn algorythm
+     * https://datagenetics.com/blog/july42013/index.html
+     */
+    private void validateCheckDigit(String input) throws CardNumberException {
         int checkSum = 0;
         int[] digits = Stream.of(input.split("")).
                 mapToInt(Integer::parseInt).
@@ -60,7 +63,7 @@ public class CardValidator {
         if ((checkSum + CHECK_DIGIT) % 10 == 0) {
             return;
         } else {
-            exceptionToThrow.addMessage("Сheck number is not valid");
+            errors.add("Сheck number is not valid");
         }
     }
 
