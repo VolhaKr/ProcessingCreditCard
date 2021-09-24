@@ -8,33 +8,31 @@ import java.util.stream.Stream;
 
 public class CardValidator {
     private static final int CARD_NUMBER_LENGTH = 16;
-    private List <String> errors = new ArrayList<>();
-    //CardNumberException exceptionToThrow = new CardNumberException();
+    private static final String SPACE_REGEX = "\\s";
+    private static final String ONLY_DIGITS_REGEX = "[0-9]+";
+    List<String> errors = new ArrayList<>();
 
-    public void validate(String number) throws CardNumberException {
+    public List<String> validate(String number) {
 
-        final String SPACE_REGEX = "\\s";
+
         if (number == null || number.isEmpty()) {
-           errors.add("Number cannot be undefined");
+            errors.add("Number cannot be undefined");
         } else {
             number = number.replaceAll(SPACE_REGEX, "");
             validateIfNumber(number);
-            validateCheckDigit(number);
+            if (errors.isEmpty()) {
+                errors = validateCheckDigit(number);
+            }
         }
+        return errors;
     }
 
-    private void validateIfNumber(String input) throws CardNumberException {
-        final String ONLY_DIGITS_REGEX = "[0-9]+";
-
+    private void validateIfNumber(String input) {
         if (input.length() != CARD_NUMBER_LENGTH) {
             errors.add("Card number must be " + CARD_NUMBER_LENGTH + " digits");
         }
         if (!input.matches(ONLY_DIGITS_REGEX)) {
             errors.add("Card number must contain only numbers from 0 to 9.");
-        }
-
-        if (!errors.isEmpty()) {
-            throw new CardNumberException(errors);
         }
     }
 
@@ -42,7 +40,7 @@ public class CardValidator {
      * The last digit of a card number is calculated by Luhn algorythm
      * https://datagenetics.com/blog/july42013/index.html
      */
-    private void validateCheckDigit(String input) throws CardNumberException {
+    private List<String> validateCheckDigit(String input) {
         int checkSum = 0;
         int[] digits = Stream.of(input.split("")).
                 mapToInt(Integer::parseInt).
@@ -60,11 +58,10 @@ public class CardValidator {
             evenPosition = !evenPosition;
         }
 
-        if ((checkSum + CHECK_DIGIT) % 10 == 0) {
-            return;
-        } else {
+        if (!((checkSum + CHECK_DIGIT) % 10 == 0)) {
             errors.add("Сheck number is not valid");
         }
+        return errors;
     }
 
     private int processEven(int digit) {

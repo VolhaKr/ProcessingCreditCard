@@ -15,7 +15,6 @@ public enum PaymentSystem {
     }
 
     String[] getNumberPrefixes() {
-
         return prefixes;
     }
 }
